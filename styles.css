@@ -346,3 +346,9 @@ canvas{
       font-size: 18px;
   }
 }
+
+@media(max-width:640px){
+    canvas{
+        max-height: 500px !important;
+    }
+}
