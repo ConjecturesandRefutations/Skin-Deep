@@ -349,6 +349,6 @@ canvas{
 
 @media(max-width:640px){
     canvas{
-        max-height: 500px !important;
+        max-height: 300px !important;
     }
 }
