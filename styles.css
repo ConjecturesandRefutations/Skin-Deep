@@ -147,6 +147,10 @@ canvas{
   transform: translate(-50%);
 }
 
+.instruction-text{
+  padding-bottom: 50px;
+}
+
 .play-music{
   cursor: pointer;
   position: absolute;
