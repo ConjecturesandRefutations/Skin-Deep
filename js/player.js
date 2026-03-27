@@ -166,7 +166,7 @@ class Player {
     }
   }
 
-     shootBullet() {
+    shootBullet() {
     if (!this.bulletFired) {
       let offsetX = 0;
       let offsetY = 0;
@@ -214,36 +214,54 @@ class Player {
     }
   } 
 
-  shootShotgun() {
-    if (!this.bulletFired) {
-      const bulletOffsets = [
-        { offsetX: 0, offsetY: 0, angle: 0 },       // Middle bullet
-        { offsetX: 20, offsetY: -20, angle: -Math.PI / 16 },  // Left bullet 
-        { offsetX: -20, offsetY: -20, angle: Math.PI / 16 }   // Right bullet
-      ];
+shootShotgun() {
+  if (!this.bulletFired) {
+    let baseX = 0;
+    let baseY = 0;
 
-      bulletOffsets.forEach(offset => {
-        const adjustedOffsetX = offset.offsetX;
-        const adjustedOffsetY = offset.offsetY;
-        const adjustedAngle = this.angle + offset.angle; // Adjust the angle
+    // 1. Calculate the base muzzle offset (Same as shootBullet)
+    if (this.angle === (-Math.PI) / 4) {
+      baseX = 57; baseY = 15; // up-right
+    } else if (this.angle === (3 * Math.PI) / 4) {
+      baseY = 35; baseX = -8; // down-left
+    } else if (this.angle === Math.PI / 4) {
+      baseX = 40; baseY = 60; // down-right
+    } else if (this.angle === (-3 * Math.PI) / 4) {
+      baseX = 15; baseY = -8; // up-left
+    } else if (this.angle === 0) {
+      baseX = 47; baseY = 37; // right
+    } else if (this.angle === Math.PI / 2) {
+      baseX = 12; baseY = 42;  // down
+    } else if (this.angle === -Math.PI / 2) {
+      baseX = 40;             // up
+    } else if (this.angle === Math.PI) {
+      baseX = 5; baseY = 9;            
+    }
 
-        // Create the bullet with adjusted initial position and angle
-        const bullet = new Bullet(
-          this.x + adjustedOffsetX,
-          this.y + adjustedOffsetY,
-          adjustedAngle
-        );
+    // 2. Define the spread for the 3 shotgun pellets
+    // We keep the angles, but start them all from the same muzzle position
+    const spreads = [
+      0,                // Middle
+      -Math.PI / 16,    // Slightly left
+      Math.PI / 16      // Slightly right
+    ];
 
-        currentGame.bullets.push(bullet);
-      });
+    spreads.forEach(spreadAngle => {
+      const bullet = new Bullet(
+        this.x + baseX, 
+        this.y + baseY, 
+        this.angle + spreadAngle
+      );
+      currentGame.bullets.push(bullet);
+    });
 
-      this.bulletFired = true; // Set the flag to true
-      shotgun.currentTime = 0;
-      if (!audioMuted) {
-        shotgun.play();
-      }
+    this.bulletFired = true;
+    shotgun.currentTime = 0;
+    if (!audioMuted) {
+      shotgun.play();
     }
   }
+}
 
   acquireShotgun() {
     this.hasShotgun = true;
